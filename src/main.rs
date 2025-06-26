@@ -16,7 +16,7 @@ fn main() {
             ..default()
         }))
         .add_systems(Startup, setup)
-        .add_systems(Update, toggle_fullscreen)
+        .add_systems(Update, (toggle_fullscreen, handle_exit))
         .run();
 }
 
@@ -27,15 +27,23 @@ fn setup(mut commands: Commands) {
 
 fn toggle_fullscreen(
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut windows: Query<&mut Window>,
+    mut windows: Query<&mut Window>, // Query for the primary window
 ) {
     if keyboard_input.just_pressed(KeyCode::F11) || keyboard_input.just_pressed(KeyCode::KeyF) {
         if let Ok(mut window) = windows.single_mut() {
             window.mode = match window.mode {
                 WindowMode::Windowed => WindowMode::BorderlessFullscreen(MonitorSelection::Current),
+                // TODO: Add option ui for modes Windowed, BorderlessFullscreen, Fullscreen
                 _ => WindowMode::Windowed,
             };
+        } else {
+            warn!("Could not find primary window to toggle fullscreen.");
         }
     }
 }
 
+fn handle_exit(keyboard_input: Res<ButtonInput<KeyCode>>, mut app_exit_events: EventWriter<AppExit>) {
+    if keyboard_input.just_pressed(KeyCode::Escape) {
+        EventWriter::write(&mut app_exit_events, AppExit::Success); // Send an AppExit event to gracefully shut down
+    }
+}
