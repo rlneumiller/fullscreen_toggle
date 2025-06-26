@@ -3,6 +3,9 @@ use bevy::{
     window::{MonitorSelection, Window, WindowMode, WindowPlugin, WindowResolution},
 };
 
+#[derive(Component)]
+struct SpinningCube;
+
 fn main() {
     print!("Hello, Bevy!\n");
     App::new()
@@ -17,12 +20,48 @@ fn main() {
             ..default()
         }))
         .add_systems(Startup, setup)
-        .add_systems(Update, (toggle_fullscreen, handle_exit)) // Runs every frame
+        .add_systems(Update, (toggle_fullscreen, handle_exit, rotate_cube)) // Runs every frame
         .run();
 }
 
-fn setup(mut commands: Commands) { // Commands is Bevy's deferred command system for entity/component operations
-    commands.spawn(Camera2d); // Spawn a new Entity and attach a Camera2d Component
+fn setup(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+) {
+     // Spawn a new Entity and attach a Camera3d Component
+    commands.spawn((
+        Camera3d::default(),
+        Transform::from_xyz(0.0, 5.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
+    ));
+
+    // Spawn a new Entity and attach a Mesh3d Component
+    commands.spawn((
+        Mesh3d(meshes.add(Cuboid::new(1.0, 1.0, 1.0))),
+        MeshMaterial3d(materials.add(Color::srgb(0.8, 0.7, 0.6))),
+        SpinningCube,
+    ));
+    
+    // Spawn a new Entity and attach a DirectionalLight Component
+    commands.spawn((
+        DirectionalLight {
+            color: Color::WHITE,
+            illuminance: 3000.0,
+            ..default()
+        },
+        Transform::from_rotation(Quat::from_euler(
+            EulerRot::ZYX,
+            0.0,
+            1.0,
+            -std::f32::consts::FRAC_PI_4,
+        )),
+    ));
+}
+
+fn rotate_cube(mut query: Query<&mut Transform, With<SpinningCube>>, time: Res<Time>) {
+    for mut transform in &mut query {
+        transform.rotate_y(time.delta_secs() * 1.0); // Rotate 1 radian per second
+    }
 }
 
 fn toggle_fullscreen(
