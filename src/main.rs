@@ -9,6 +9,7 @@ fn main() {
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "Fullscreen Toggle".to_string(),
+                // TODO: Add option UI for common resolutions
                 resolution: WindowResolution::new(800.0, 600.0),
                 mode: WindowMode::Windowed,
                 ..default()
@@ -16,12 +17,12 @@ fn main() {
             ..default()
         }))
         .add_systems(Startup, setup)
-        .add_systems(Update, (toggle_fullscreen, handle_exit))
+        .add_systems(Update, (toggle_fullscreen, handle_exit)) // Runs every frame
         .run();
 }
 
-fn setup(mut commands: Commands) {
-    commands.spawn(Camera2d);
+fn setup(mut commands: Commands) { // Commands is Bevy's deferred command system for entity/component operations
+    commands.spawn(Camera2d); // Spawn a new Entity and attach a Camera2d Component
 }
 
 fn toggle_fullscreen(
