@@ -29,7 +29,7 @@ fn toggle_fullscreen(
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mut windows: Query<&mut Window>, // Query for the primary window
 ) {
-    if keyboard_input.just_pressed(KeyCode::F11) || keyboard_input.just_pressed(KeyCode::KeyF) {
+    if keyboard_input.just_pressed(KeyCode::F11) {
         if let Ok(mut window) = windows.single_mut() {
             window.mode = match window.mode {
                 WindowMode::Windowed => WindowMode::BorderlessFullscreen(MonitorSelection::Current),
