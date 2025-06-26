@@ -27,7 +27,7 @@ fn setup(mut commands: Commands) { // Commands is Bevy's deferred command system
 
 fn toggle_fullscreen(
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut windows: Query<&mut Window>,
+    mut windows: Query<&mut Window>, // Ask for all entities that have a Window Component
 ) {
     if keyboard_input.just_pressed(KeyCode::F11) {
         if let Ok(mut window) = windows.single_mut() {
