@@ -21,13 +21,12 @@ fn main() {
 }
 
 fn setup(mut commands: Commands) {
-    // Spawn a camera
     commands.spawn(Camera2d);
 }
 
 fn toggle_fullscreen(
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut windows: Query<&mut Window>, // Query for the primary window
+    mut windows: Query<&mut Window>,
 ) {
     if keyboard_input.just_pressed(KeyCode::F11) {
         if let Ok(mut window) = windows.single_mut() {
@@ -44,6 +43,6 @@ fn toggle_fullscreen(
 
 fn handle_exit(keyboard_input: Res<ButtonInput<KeyCode>>, mut app_exit_events: EventWriter<AppExit>) {
     if keyboard_input.just_pressed(KeyCode::Escape) {
-        EventWriter::write(&mut app_exit_events, AppExit::Success); // Send an AppExit event to gracefully shut down
+        EventWriter::write(&mut app_exit_events, AppExit::Success);
     }
 }
