@@ -9,7 +9,6 @@ use bevy::window::{WindowPlugin, Window, WindowResolution, WindowMode};
 use components::*;
 
 fn main() {
-    print!("Hello, Bevy!\n");
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
