@@ -123,13 +123,13 @@ pub fn handle_menu_interaction(
                 }
             }
             Interaction::Hovered => {
-                *color = Color::srgb(0.6, 0.6, 0.6).into();
+                color.0 = Color::srgb(0.6, 0.6, 0.6);
             }
             Interaction::None => {
                 if window_mode_button.is_some() {
-                    *color = Color::srgb(0.4, 0.4, 0.4).into();
+                    color.0 = Color::srgb(0.4, 0.4, 0.4);
                 } else {
-                    *color = Color::srgb(0.6, 0.3, 0.3).into();
+                    color.0 = Color::srgb(0.6, 0.3, 0.3);
                 }
             }
         }
